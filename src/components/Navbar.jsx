@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useCart } from '../context/CartContext'
 
 const links = [
   { label: 'الرئيسية', href: '#hero' },
@@ -10,6 +11,7 @@ const links = [
 ]
 
 export default function Navbar() {
+  const { count, dispatch } = useCart()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -51,6 +53,28 @@ export default function Navbar() {
         ))}
       </div>
 
+      <button onClick={() => dispatch({ type: 'TOGGLE' })}
+        style={{
+          display: 'none', alignItems: 'center', gap: 6, padding: '8px 16px',
+          borderRadius: 50, border: '1px solid rgba(255,215,0,0.15)',
+          background: 'rgba(255,215,0,0.04)', color: 'var(--gold)',
+          cursor: 'pointer', fontFamily: "'Cairo', sans-serif", fontWeight: 700, fontSize: '0.85rem',
+          position: 'relative',
+        }}
+        className="desktop-cart-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
+        </svg>
+        <span className="cart-label">طلبي</span>
+        <span style={{
+          position: 'absolute', top: -6, right: -6, width: 20, height: 20, borderRadius: '50%',
+          background: count > 0 ? 'var(--red)' : 'rgba(255,255,255,0.15)',
+          color: '#fff', fontSize: '0.65rem', display: 'flex',
+          alignItems: 'center', justifyContent: 'center', fontWeight: 800,
+        }}>{count}</span>
+      </button>
+
       <button onClick={() => setMobileOpen(!mobileOpen)}
         style={{ display: 'none', background: 'none', border: 'none', color: 'var(--gold)', fontSize: '1.8rem', cursor: 'pointer', padding: 4 }}
         className="mobile-toggle"
@@ -77,7 +101,10 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      <style>{`@media (max-width: 768px) { nav > div:first-of-type { display: none !important; } .mobile-toggle { display: block !important; } }`}</style>
+      <style>{`
+  @media (max-width: 768px) { nav > div:first-of-type { display: none !important; } .mobile-toggle { display: block !important; } .desktop-cart-btn { display: inline-flex !important; } .desktop-cart-btn .cart-label { display: none !important; } }
+  @media (min-width: 769px) { .desktop-cart-btn { display: inline-flex !important; } }
+`}</style>
     </motion.nav>
   )
 }

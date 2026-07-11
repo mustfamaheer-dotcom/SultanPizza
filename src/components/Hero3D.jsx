@@ -1,6 +1,6 @@
 import React, { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Float, Environment, Text } from '@react-three/drei'
+import { Float, Environment } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion } from 'framer-motion'
 
@@ -42,9 +42,12 @@ function Pizza() {
   useFrame((state, delta) => {
     if (!group.current) return
     const t = state.clock.elapsedTime
-    group.current.rotation.y += delta * 0.25
-    group.current.position.y = Math.sin(t * 0.4) * 0.12
-    if (cheeseMat.current) cheeseMat.current.emissiveIntensity = 0.15 + Math.sin(t * 0.8) * 0.1
+    group.current.rotation.y += delta * 0.4
+    group.current.rotation.x = Math.sin(t * 0.3) * 0.05
+    group.current.rotation.z = Math.cos(t * 0.35) * 0.04
+    group.current.position.y = Math.sin(t * 0.5) * 0.2
+    group.current.position.x = Math.sin(t * 0.2) * 0.06
+    if (cheeseMat.current) cheeseMat.current.emissiveIntensity = 0.1 + Math.sin(t * 1.2) * 0.15
   })
 
   return (
@@ -121,16 +124,6 @@ function Particles() {
   )
 }
 
-function FloatingLabels() {
-  const ref = useRef()
-  useFrame((state) => { if (ref.current) ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.15 })
-  return (
-    <group ref={ref} position={[0, 2.8, 0]}>
-      <Text fontSize={0.2} color="#FFD700" anchorX="center" anchorY="middle" transparent opacity={0.3}>✦ PREMIUM PIZZA ✦</Text>
-    </group>
-  )
-}
-
 function Scene() {
   return (
     <>
@@ -149,7 +142,6 @@ function Scene() {
       </Float>
       <Particles />
       <FloatingRings />
-      <FloatingLabels />
     </>
   )
 }

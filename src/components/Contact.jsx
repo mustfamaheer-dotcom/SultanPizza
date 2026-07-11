@@ -16,10 +16,22 @@ export default function Contact() {
             style={{ width: 60, height: 60, margin: '0 auto 25px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--gold), #FF8C00)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', boxShadow: '0 0 40px rgba(255,215,0,0.2)' }}>
             🍕
           </motion.div>
-          <div style={{ fontSize: '1.05rem', color: 'var(--text-muted)', lineHeight: 2.2, marginBottom: 30 }}>
-            <div>📍 القاهرة، مصر</div>
-            <div>📞 <a href="tel:+201129115112" style={{ color: 'var(--gold)', textDecoration: 'none' }}>+20 112 911 5112</a></div>
-            <div>🟢 واتساب: <a href="https://wa.me/201129115112" style={{ color: 'var(--gold)', textDecoration: 'none' }}>+20 112 911 5112</a></div>
+          <div style={{ marginBottom: 30 }}>
+            <div style={{ fontSize: '1.3rem', fontWeight: 600, color: 'var(--text)', marginBottom: 12, letterSpacing: 1 }}>📍 مدينة نصر في القاهره</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.04)', marginBottom: 10 }}>
+              <span style={{ fontSize: '1.3rem' }}>📞</span>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', fontWeight: 600, marginBottom: 2 }}>اتصل بنا | Call Us</div>
+                <a href="tel:+201129115112" style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--gold)', textDecoration: 'none', letterSpacing: 1, direction: 'ltr', display: 'inline-block' }}>+20 112 911 5112</a>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderRadius: 14, background: 'rgba(37,211,102,0.04)', border: '1px solid rgba(37,211,102,0.12)' }}>
+              <span style={{ fontSize: '1.3rem' }}>🟢</span>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '0.7rem', color: '#25D366', fontWeight: 600, marginBottom: 2 }}>واتساب | WhatsApp</div>
+                <a href="https://wa.me/201129115112" style={{ fontSize: '1.4rem', fontWeight: 800, color: '#25D366', textDecoration: 'none', letterSpacing: 1, direction: 'ltr', display: 'inline-block' }}>+20 112 911 5112</a>
+              </div>
+            </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
             <motion.a href="https://wa.me/201129115112" target="_blank" rel="noopener noreferrer"
