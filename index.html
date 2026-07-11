@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بيتزا السلطان | Sultan Pizza</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Playfair+Display:wght@400;700;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --red: #C41E3A;
+      --dark-red: #8B0000;
+      --gold: #FFD700;
+      --dark: #0a0a1a;
+      --darker: #060612;
+      --text: #ffffff;
+      --text-muted: #cccccc;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ===== 3D HERO ===== */
+    #hero-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(10,10,26,0.3) 0%, rgba(6,6,18,0.85) 100%);
+      pointer-events: none;
+    }
+
+    .hero-overlay * { pointer-events: auto; }
+
+    .hero-logo {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 4px solid var(--gold);
+      box-shadow: 0 0 60px rgba(255,215,0,0.3);
+      object-fit: cover;
+      animation: floatLogo 3s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes floatLogo {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 40px rgba(255,215,0,0.4);
+      letter-spacing: 2px;
+      line-height: 1.1;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.8rem, 4vw, 3.5rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 5px;
+      text-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 1.5vw, 1.3rem);
+      color: var(--text-muted);
+      margin-top: 15px;
+      opacity: 0.9;
+    }
+
+    .hero-btns {
+      margin-top: 35px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 14px 40px;
+      border-radius: 50px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--red), var(--dark-red));
+      color: #fff;
+      box-shadow: 0 8px 30px rgba(196,30,58,0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(196,30,58,0.6);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--gold);
+      border: 2px solid var(--gold);
+    }
+
+    .btn-outline:hover {
+      background: var(--gold);
+      color: var(--dark);
+      transform: translateY(-3px);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+      color: var(--gold);
+      font-size: 2rem;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(15px); }
+    }
+
+    /* ===== SECTIONS COMMON ===== */
+    .section {
+      position: relative;
+      z-index: 1;
+      padding: 100px 5%;
+      background: var(--dark);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .section-title .gold { color: var(--gold); }
+    .section-title .red { color: var(--red); }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 60px;
+    }
+
+    .section-divider {
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--gold), var(--red));
+      margin: 0 auto 50px;
+      border-radius: 2px;
+    }
+
+    /* ===== ABOUT ===== */
+    #about {
+      margin-top: 100vh;
+      background: linear-gradient(180deg, var(--dark) 0%, #0f0f2a 100%);
+      padding-top: 120px;
+    }
+
+    .about-content {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      font-size: 1.15rem;
+      line-height: 2;
+      color: var(--text-muted);
+    }
+
+    .about-content strong { color: var(--gold); }
+
+    /* ===== MENU ===== */
+    #menu {
+      background: linear-gradient(180deg, #0f0f2a 0%, var(--dark) 100%);
+    }
+
+    .menu-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
+    }
+
+    .menu-tab {
+      padding: 12px 35px;
+      border-radius: 50px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-muted);
+      font-family: 'Cairo', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .menu-tab:hover, .menu-tab.active {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--red);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .menu-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 25px 30px;
+      transition: all 0.4s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .menu-item:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,215,0,0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .menu-item-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .menu-item-name .category-badge {
+      font-size: 0.65rem;
+      padding: 3px 12px;
+      border-radius: 20px;
+      background: rgba(255,215,0,0.15);
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .menu-prices {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .price-box {
+      text-align: center;
+      padding: 8px 5px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .price-box .size {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .price-box .price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .price-box .currency {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .menu-note {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 50px;
+      opacity: 0.7;
+    }
+
+    /* ===== GALLERY ===== */
+    #gallery {
+      background: linear-gradient(180deg, var(--dark) 0%, #0f0f2a 100%);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.03);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .gallery-item:hover img { transform: scale(1.1); }
+
+    .gallery-item .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 30px 20px 20px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .gallery-item:hover .overlay { opacity: 1; }
+
+    .gallery-item .overlay span {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--gold);
+    }
+
+    /* ===== CONTACT ===== */
+    #contact {
+      background: linear-gradient(180deg, #0f0f2a 0%, var(--darker) 100%);
+      padding-bottom: 50px;
+    }
+
+    .contact-container {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 24px;
+      padding: 50px;
+      backdrop-filter: blur(20px);
+    }
+
+    .contact-info-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.04);
+      text-align: right;
+      direction: rtl;
+      transition: all 0.3s ease;
+    }
+
+    .contact-info-row:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,215,0,0.1);
+    }
+
+    .contact-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255,215,0,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+
+    .contact-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .contact-link {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      direction: ltr;
+      display: inline-block;
+    }
+
+    .contact-link:hover {
+      text-decoration: underline;
+    }
+
+    .contact-btns {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 36px;
+      border-radius: 60px;
+      background: linear-gradient(135deg, #1877F2, #0C5BC6);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      font-family: 'Cairo', sans-serif;
+      transition: all 0.3s ease;
+      min-width: 200px;
+      justify-content: center;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(24,119,242,0.4);
+    }
+
+    @media (max-width: 600px) {
+      .contact-card { padding: 32px 20px; }
+      .contact-info-row { padding: 12px 16px; }
+      .contact-info-row .contact-icon-box { width: 36px; height: 36px; }
+      .contact-btns { flex-direction: column; align-items: center; }
+      .social-btn { width: 100%; }
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 30px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      opacity: 0.6;
+      background: var(--darker);
+    }
+
+    /* ===== LOADING SCREEN ===== */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--darker);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader-pizza {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 5px solid rgba(255,215,0,0.1);
+      border-top-color: var(--gold);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loader-text {
+      margin-top: 25px;
+      font-size: 1.2rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .hero-logo { width: 100px; height: 100px; }
+      .hero-btns { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 250px; text-align: center; }
+      .section { padding: 60px 5%; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .menu-item { padding: 20px; }
+      .menu-prices { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-card { padding: 30px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .menu-prices { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ===== PARTICLE OVERLAY TEXTURE ===== */
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.03;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Hide scrollbar on hero */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-pizza"></div>
+    <div class="loader-text">Sultan Pizza ... يتم التحميل</div>
+  </div>
+
+  <!-- 3D CANVAS -->
+  <div id="hero-canvas"></div>
+  <div class="noise-overlay"></div>
+
+  <!-- HERO -->
+  <section class="hero-overlay">
+    <img src="WhatsApp Image 2026-07-11 at 5.47.37 PM.jpeg" alt="Sultan Pizza" class="hero-logo">
+    <div class="hero-title">Sultan Pizza</div>
+    <div class="hero-subtitle">بيتزا السلطان</div>
+    <div class="hero-tagline">تذوق الفخامة .. مذاق السلاطين</div>
+    <div class="hero-btns">
+      <a href="#menu" class="btn btn-primary">اطلع على المنيو</a>
+      <a href="#contact" class="btn btn-outline">تواصل معنا</a>
+    </div>
+    <a href="#about" class="scroll-indicator">⌄</a>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section">
+    <h2 class="section-title reveal">
+      <span class="gold">Sultan</span> <span class="red">Pizza</span>
+    </h2>
+    <div class="section-divider"></div>
+    <div class="about-content reveal">
+      <p>
+        في <strong>بيتزا السلطان</strong>، نجمع بين التقاليد الإيطالية الأصيلة واللمسة الشرقية الفاخرة.
+        كل قطعة بيتزا تُحضّر بعناية باستخدام أفضل المكونات الطازجة، لتمنحك تجربة ملكية لا تُنسى.
+        من البيتزا الإيطالية الكلاسيكية إلى النكهات الشرقية المبتكرة – نحن هنا لنُرضي ذوقك السلطاني.
+      </p>
+      <br>
+      <p>
+        At <strong>Sultan Pizza</strong>, we blend authentic Italian tradition with a luxurious oriental touch.
+        Every slice is crafted with the finest fresh ingredients for a truly royal experience.
+        From classic Italian pizzas to innovative oriental flavors — we're here to satisfy your royal taste.
+      </p>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu" class="section">
+    <h2 class="section-title reveal">
+      <span class="gold">المنيو</span> <span class="red">| Menu</span>
+    </h2>
+    <div class="section-divider"></div>
+
+    <div class="menu-tabs reveal">
+      <button class="menu-tab active" data-category="all">الكل | All</button>
+      <button class="menu-tab" data-category="italian">بيتزا إيطالي | Italian</button>
+      <button class="menu-tab" data-category="oriental">بيتزا شرقي | Oriental</button>
+    </div>
+
+    <div id="menu-grid" class="menu-grid"></div>
+
+    <p class="menu-note">* السعر يشمل ضريبة القيمة المضافة | All prices include VAT</p>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" class="section">
+    <h2 class="section-title reveal">
+      <span class="gold">معرض</span> <span class="red">الصور | Gallery</span>
+    </h2>
+    <div class="section-divider"></div>
+    <div class="gallery-grid reveal">
+      <div class="gallery-item">
+        <img src="WhatsApp Image 2026-07-11 at 5.54.07 PM (1).jpeg" alt="Sultan Pizza">
+        <div class="overlay"><span>بيتزا السلطان</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="WhatsApp Image 2026-07-11 at 5.54.06 PM (2).jpeg" alt="Sultan Pizza">
+        <div class="overlay"><span>بيتزا إيطالي</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="WhatsApp Image 2026-07-11 at 5.54.07 PM (2).jpeg" alt="Sultan Pizza">
+        <div class="overlay"><span>شهية السلطان</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="WhatsApp Image 2026-07-11 at 5.54.07 PM.jpeg" alt="Sultan Pizza">
+        <div class="overlay"><span>مكونات طازجة</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="WhatsApp Image 2026-07-11 at 5.54.07 PM (3).jpeg" alt="Sultan Pizza">
+        <div class="overlay"><span>روعة التقديم</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="WhatsApp Image 2026-07-11 at 5.54.08 PM.jpeg" alt="Sultan Pizza">
+        <div class="overlay"><span>نكهة السلاطين</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section">
+    <h2 class="section-title reveal">
+      <span class="gold">تواصل</span> <span class="red">معنا | Contact</span>
+    </h2>
+    <p class="section-subtitle reveal">نحن هنا لخدمتك | We're here to serve you</p>
+    <div class="section-divider"></div>
+    <div class="contact-container reveal">
+      <div class="contact-card" style="padding:56px 48px;box-shadow:0 24px 80px rgba(0,0,0,0.3);">
+        <div style="width:64px;height:64px;margin:0 auto 28px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#FF8C00);display:flex;align-items:center;justify-content:center;font-size:1.6rem;box-shadow:0 0 50px rgba(255,215,0,0.15);">
+          🍕
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:36px;">
+          <div class="contact-info-row">
+            <div class="contact-icon-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div style="flex:1;">
+              <div class="contact-label">الموقع | Location</div>
+              <div class="contact-value">القاهرة، مصر</div>
+            </div>
+          </div>
+          <div class="contact-info-row">
+            <div class="contact-icon-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+            </div>
+            <div style="flex:1;">
+              <div class="contact-label">اتصل بنا | Phone</div>
+              <a href="tel:+201140621100" class="contact-link">+20 114 0621100</a>
+            </div>
+          </div>
+          <div class="contact-info-row" style="background:rgba(37,211,102,0.06);border:1px solid rgba(37,211,102,0.15);">
+            <div class="contact-icon-box" style="background:rgba(37,211,102,0.12);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </div>
+            <div style="flex:1;">
+              <div class="contact-label">واتساب | WhatsApp</div>
+              <a href="https://wa.me/201140621100" class="contact-link" style="color:#25D366;">+20 114 0621100</a>
+            </div>
+          </div>
+        </div>
+        <div class="contact-btns">
+          <a href="https://wa.me/201140621100" target="_blank" class="social-btn" style="background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 8px 32px rgba(37,211,102,0.3);min-width:200px;justify-content:center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            واتساب | WhatsApp
+          </a>
+          <a href="https://www.facebook.com/share/18viPaUhgZ/" target="_blank" class="social-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Sultan Pizza على فيسبوك
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 بيتزا السلطان | Sultan Pizza — جميع الحقوق محفوظة
+  </footer>
+
+  <!-- THREE.JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // ===== MENU DATA =====
+    const menuData = {
+      italian: [
+        { name: 'بيتزا خضروات', en: 'Vegetable Pizza', small: 94, medium: 140, large: 198, family: 260 },
+        { name: 'بيتزا مارجريتا سادة', en: 'Margherita', small: 94, medium: 140, large: 198, family: 260 },
+        { name: 'بيتزا لحمة', en: 'Meat Pizza', small: 112, medium: 173, large: 245, family: 320 },
+        { name: 'بيتزا سجق', en: 'Sausage Pizza', small: 100, medium: 153, large: 216, family: 283 },
+        { name: 'بيتزا سجق بلدي', en: 'Local Sausage Pizza', small: 112, medium: 170, large: 240, family: 313 },
+        { name: 'بيتزا سوسيس', en: 'Sausages Pizza', small: 100, medium: 153, large: 215, family: 282 },
+        { name: 'بيتزا بسطرمة', en: 'Pastirma Pizza', small: 115, medium: 175, large: 248, family: 326 },
+        { name: 'بيتزا تونة', en: 'Tuna Pizza', small: 107, medium: 165, large: 235, family: 307 },
+        { name: 'بيتزا جبنة مشكلة', en: 'Mixed Cheese Pizza', small: 109, medium: 166, large: 235, family: 307 },
+        { name: 'بيتزا مشرووم', en: 'Mushroom Pizza', small: 107, medium: 166, large: 236, family: 307 },
+        { name: 'بيتزا بولوبيف', en: 'Beef Pizza', small: 107, medium: 164, large: 234, family: 306 },
+        { name: 'بيتزا سلامي', en: 'Salami Pizza', small: 107, medium: 164, large: 233, family: 305 },
+        { name: 'بيتزا بالفراخ', en: 'Chicken Pizza', small: 117, medium: 181, large: 247, family: 321 },
+        { name: 'بيتزا سوبريم', en: 'Supreme Pizza', small: 115, medium: 175, large: 245, family: 317 },
+        { name: 'بيتزا تونة قطع', en: 'Tuna Chunks Pizza', small: 115, medium: 177, large: 238, family: 310 },
+        { name: 'بيتزا فراخ باربيكيو', en: 'BBQ Chicken Pizza', small: 117, medium: 182, large: 248, family: 322 },
+        { name: 'بيتزا روستو رومي مدخن', en: 'Smoked Turkey Roast', small: 110, medium: 169, large: 238, family: 310 },
+        { name: 'بيتزا كيري', en: 'Kerry Pizza', small: 110, medium: 166, large: 232, family: 307 },
+        { name: 'بيتزا سوبر روستو', en: 'Super Roast Pizza', small: 115, medium: 174, large: 245, family: 317 },
+        { name: 'بيتزا مشكل لحوم', en: 'Mixed Meat Pizza', small: 118, medium: 180, large: 254, family: 329 },
+        { name: 'بيتزا ميكس 1×3', en: 'Mix 1×3 Pizza', small: 115, medium: 174, large: 245, family: 317 },
+        { name: 'بيتزا فراخ استربس', en: 'Chicken Strips Pizza', small: 117, medium: 182, large: 248, family: 322 },
+        { name: 'بيتزا فراخ مشكل', en: 'Mixed Chicken Pizza', small: 121, medium: 187, large: 251, family: 325 },
+        { name: 'بيتزا برجر', en: 'Burger Pizza', small: 126, medium: 195, large: 260, family: 336 }
+      ],
+      oriental: [
+        { name: 'بيتزا بالجبنة الرومي', en: 'Roumy Cheese Pizza', small: 103, medium: 157, large: 226, family: 294 },
+        { name: 'بيتزا سجق', en: 'Sausage Pizza', small: 99, medium: 150, large: 216, family: 278 },
+        { name: 'بيتزا سجق بلدي', en: 'Local Sausage Pizza', small: 116, medium: 174, large: 245, family: 319 },
+        { name: 'بيتزا بالسوسيس', en: 'Sausages Pizza', small: 99, medium: 151, large: 217, family: 280 },
+        { name: 'بيتزا لحمة', en: 'Meat Pizza', small: 111, medium: 171, large: 245, family: 322 },
+        { name: 'بيتزا بسطرمة', en: 'Pastirma Pizza', small: 114, medium: 175, large: 249, family: 329 },
+        { name: 'بيتزا تونة', en: 'Tuna Pizza', small: 106, medium: 164, large: 235, family: 307 },
+        { name: 'بيتزا موتزاريلا', en: 'Mozzarella Pizza', small: 108, medium: 164, large: 235, family: 309 },
+        { name: 'بيتزا جبنة مشكلة', en: 'Mixed Cheese Pizza', small: 114, medium: 171, large: 245, family: 322 },
+        { name: 'بيتزا جبنة كيري', en: 'Kerry Cheese Pizza', small: 109, medium: 165, large: 236, family: 310 },
+        { name: 'بيتزا مشرووم', en: 'Mushroom Pizza', small: 108, medium: 164, large: 236, family: 310 },
+        { name: 'بيتزا بالبولوبيف', en: 'Beef Pizza', small: 108, medium: 165, large: 236, family: 309 },
+        { name: 'بيتزا سلامي', en: 'Salami Pizza', small: 107, medium: 165, large: 237, family: 310 },
+        { name: 'بيتزا بالفراخ', en: 'Chicken Pizza', small: 115, medium: 175, large: 242, family: 315 },
+        { name: 'بيتزا سوبريم', en: 'Supreme Pizza', small: 115, medium: 175, large: 249, family: 321 },
+        { name: 'بيتزا تونة قطع', en: 'Tuna Chunks Pizza', small: 111, medium: 176, large: 238, family: 312 },
+        { name: 'بيتزا باربيكيو', en: 'BBQ Pizza', small: 116, medium: 178, large: 242, family: 317 },
+        { name: 'بيتزا روستو بيف مدخن', en: 'Smoked Roast Beef', small: 110, medium: 169, large: 240, family: 314 },
+        { name: 'بيتزا سوبر روستو', en: 'Super Roast Pizza', small: 115, medium: 175, large: 249, family: 321 },
+        { name: 'بيتزا مشكل لحوم', en: 'Mixed Meat Pizza', small: 118, medium: 182, large: 258, family: 333 },
+        { name: 'بيتزا فراخ استربس', en: 'Chicken Strips Pizza', small: 116, medium: 176, large: 242, family: 317 },
+        { name: 'بيتزا فراخ مشكل', en: 'Mixed Chicken Pizza', small: 120, medium: 186, large: 249, family: 321 }
+      ]
+    };
+
+    // ===== RENDER MENU =====
+    function renderMenu(category) {
+      const grid = document.getElementById('menu-grid');
+      grid.innerHTML = '';
+      let items = [];
+      if (category === 'all') {
+        items = [
+          ...menuData.italian.map(i => ({ ...i, cat: 'italian' })),
+          ...menuData.oriental.map(i => ({ ...i, cat: 'oriental' }))
+        ];
+      } else {
+        items = menuData[category].map(i => ({ ...i, cat: category }));
+      }
+
+      items.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'menu-item';
+        div.style.animationDelay = `${index * 0.05}s`;
+        div.innerHTML = `
+          <div class="menu-item-name">
+            <span>${item.name}</span>
+            <span class="category-badge">${item.cat === 'italian' ? 'إيطالي' : 'شرقي'}</span>
+          </div>
+          <div class="menu-item-name" style="font-size:0.85rem;color:#999;margin-top:-10px;margin-bottom:12px;">
+            ${item.en}
+          </div>
+          <div class="menu-prices">
+            <div class="price-box"><div class="size">صغير<br><small>S</small></div><div class="price">${item.small}</div><div class="currency">ج.م</div></div>
+            <div class="price-box"><div class="size">وسط<br><small>M</small></div><div class="price">${item.medium}</div><div class="currency">ج.م</div></div>
+            <div class="price-box"><div class="size">كبير<br><small>L</small></div><div class="price">${item.large}</div><div class="currency">ج.م</div></div>
+            <div class="price-box"><div class="size">عائلي<br><small>F</small></div><div class="price">${item.family}</div><div class="currency">ج.م</div></div>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    // ===== MENU TABS =====
+    document.querySelectorAll('.menu-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        renderMenu(tab.dataset.category);
+      });
+    });
+
+    renderMenu('all');
+
+    // ===== SCROLL REVEAL =====
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    // ===== 3D SCENE =====
+    const container = document.getElementById('hero-canvas');
+    const scene = new THREE.Scene();
+    const w = window.innerWidth;
+    const isSmall = w <= 430;
+    const isMobile = w < 768;
+    const camPosZ = isSmall ? 9 : isMobile ? 8 : 8;
+    const camPosY = 0.8;
+    const camFov = 40;
+    const camera = new THREE.PerspectiveCamera(camFov, w / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, camPosY, camPosZ);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    // Lights
+    const ambient = new THREE.AmbientLight(0x404060, 0.5);
+    scene.add(ambient);
+
+    const mainLight = new THREE.DirectionalLight(0xffeedd, 1.5);
+    mainLight.position.set(5, 8, 5);
+    mainLight.castShadow = true;
+    scene.add(mainLight);
+
+    const fillLight = new THREE.DirectionalLight(0x4444ff, 0.4);
+    fillLight.position.set(-3, 1, -3);
+    scene.add(fillLight);
+
+    const rimLight = new THREE.DirectionalLight(0xff8844, 0.6);
+    rimLight.position.set(-2, 3, -5);
+    scene.add(rimLight);
+
+    const backLight = new THREE.PointLight(0xff4400, 0.3, 10);
+    backLight.position.set(0, -1, -4);
+    scene.add(backLight);
+
+    // ===== Build 3D Pizza =====
+    const pizzaGroup = new THREE.Group();
+
+    // Crust (torus)
+    const crustGeo = new THREE.TorusGeometry(2.2, 0.4, 32, 64);
+    const crustMat = new THREE.MeshStandardMaterial({
+      color: 0xD4A04A,
+      roughness: 0.9,
+      metalness: 0.1,
+    });
+    const crust = new THREE.Mesh(crustGeo, crustMat);
+    crust.rotation.x = Math.PI / 2;
+    crust.position.y = -0.1;
+    pizzaGroup.add(crust);
+
+    // Pizza base (circle)
+    const baseGeo = new THREE.CircleGeometry(2.0, 64);
+    const baseMat = new THREE.MeshStandardMaterial({
+      color: 0xE8B86D,
+      roughness: 0.8,
+      metalness: 0,
+      side: THREE.DoubleSide,
+    });
+    const base = new THREE.Mesh(baseGeo, baseMat);
+    base.rotation.x = -Math.PI / 2;
+    base.position.y = 0;
+    pizzaGroup.add(base);
+
+    // Sauce layer
+    const sauceGeo = new THREE.CircleGeometry(1.85, 64);
+    const sauceMat = new THREE.MeshStandardMaterial({
+      color: 0xCC3333,
+      roughness: 0.6,
+      metalness: 0,
+      side: THREE.DoubleSide,
+    });
+    const sauce = new THREE.Mesh(sauceGeo, sauceMat);
+    sauce.rotation.x = -Math.PI / 2;
+    sauce.position.y = 0.02;
+    pizzaGroup.add(sauce);
+
+    // Cheese layer
+    const cheeseGeo = new THREE.CircleGeometry(1.75, 64);
+    const cheeseMat = new THREE.MeshStandardMaterial({
+      color: 0xFFD700,
+      roughness: 0.7,
+      metalness: 0,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.85,
+    });
+    const cheese = new THREE.Mesh(cheeseGeo, cheeseMat);
+    cheese.rotation.x = -Math.PI / 2;
+    cheese.position.y = 0.04;
+    pizzaGroup.add(cheese);
+
+    // Pepperoni slices
+    function createPepperoni(x, z, rot) {
+      const geo = new THREE.CylinderGeometry(0.25, 0.25, 0.05, 16);
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0x8B2500,
+        roughness: 0.4,
+        metalness: 0.1,
+      });
+      const pepperoni = new THREE.Mesh(geo, mat);
+      pepperoni.position.set(x, 0.07, z);
+      pepperoni.rotation.x = Math.random() * Math.PI;
+      pepperoni.rotation.z = Math.random() * Math.PI;
+      return pepperoni;
+    }
+
+    const pepperoniPositions = [
+      [0.5, 0.5], [-0.5, 0.5], [0.5, -0.5], [-0.5, -0.5],
+      [1.0, 0.0], [-1.0, 0.0], [0.0, 1.0], [0.0, -1.0],
+      [0.7, -0.7], [-0.7, 0.7], [1.2, 0.6], [-1.2, -0.6],
+      [0.3, 1.2], [-0.3, -1.2], [0.9, -0.3], [-0.9, 0.3],
+    ];
+
+    pepperoniPositions.forEach(([x, z]) => {
+      pizzaGroup.add(createPepperoni(x, z));
+    });
+
+    // Small cheese dots / herb flecks
+    function createHerb(x, z) {
+      const geo = new THREE.SphereGeometry(0.04, 6, 6);
+      const mat = new THREE.MeshStandardMaterial({
+        color: Math.random() > 0.5 ? 0x228B22 : 0x90EE90,
+        roughness: 0.8,
+      });
+      const herb = new THREE.Mesh(geo, mat);
+      herb.position.set(x, 0.08, z);
+      return herb;
+    }
+
+    for (let i = 0; i < 60; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = Math.random() * 1.6;
+      pizzaGroup.add(createHerb(Math.cos(angle) * radius, Math.sin(angle) * radius));
+    }
+
+    // A missing slice (wedge removed)
+    const wedgeAngle = 0.5;
+    const wedgeStart = 0.2;
+    const wedgeEnd = wedgeStart + wedgeAngle;
+
+    // Create a "hole" wedge using a negative shape approach - add a dark wedge
+    const wedgeShape = new THREE.Shape();
+    wedgeShape.moveTo(0, 0);
+    wedgeShape.absarc(0, 0, 2.2, wedgeStart, wedgeEnd, false);
+    wedgeShape.lineTo(0, 0);
+
+    const wedgeGeo = new THREE.ShapeGeometry(wedgeShape);
+    const wedgeMat = new THREE.MeshBasicMaterial({
+      color: 0x0a0a1a,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
+    const wedge = new THREE.Mesh(wedgeGeo, wedgeMat);
+    wedge.rotation.x = -Math.PI / 2;
+    wedge.position.y = 0.06;
+    pizzaGroup.add(wedge);
+
+    // Missing slice edge
+    const sliceEdgeMat = new THREE.MeshStandardMaterial({
+      color: 0xD4A04A,
+      roughness: 0.9,
+      side: THREE.DoubleSide,
+    });
+
+    for (let side = 0; side < 2; side++) {
+      const angle = side === 0 ? wedgeStart : wedgeEnd;
+      const edgeGeo = new THREE.PlaneGeometry(0.3, 0.15);
+      const edge = new THREE.Mesh(edgeGeo, sliceEdgeMat);
+      const ex = Math.cos(angle) * 1.0;
+      const ez = Math.sin(angle) * 1.0;
+      edge.position.set(ex, 0.1, ez);
+      edge.rotation.y = -angle + Math.PI / 2;
+      edge.rotation.x = Math.PI / 6;
+      pizzaGroup.add(edge);
+    }
+
+    scene.add(pizzaGroup);
+
+    // ===== Floating particles =====
+    const particleCount = 200;
+    const particleGeo = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
+
+    for (let i = 0; i < particleCount; i++) {
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.random() * Math.PI * 2;
+      const r = 3 + Math.random() * 5;
+      positions[i * 3] = Math.sin(theta) * Math.cos(phi) * r;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 5;
+      positions[i * 3 + 2] = Math.sin(theta) * Math.sin(phi) * r;
+      sizes[i] = 0.02 + Math.random() * 0.06;
+    }
+
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particleGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+    const particleMat = new THREE.PointsMaterial({
+      color: 0xFFD700,
+      size: 0.04,
+      transparent: true,
+      opacity: 0.6,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true,
+    });
+
+    const particles = new THREE.Points(particleGeo, particleMat);
+    scene.add(particles);
+
+    // ===== Second particle layer (spice particles) =====
+    const spiceCount = 80;
+    const spiceGeo = new THREE.BufferGeometry();
+    const spicePos = new Float32Array(spiceCount * 3);
+    for (let i = 0; i < spiceCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 0.3 + Math.random() * 1.8;
+      spicePos[i * 3] = Math.cos(angle) * radius;
+      spicePos[i * 3 + 1] = 0.08;
+      spicePos[i * 3 + 2] = Math.sin(angle) * radius;
+    }
+    spiceGeo.setAttribute('position', new THREE.BufferAttribute(spicePos, 3));
+
+    const spiceMat = new THREE.PointsMaterial({
+      color: 0xCC3333,
+      size: 0.03,
+      transparent: true,
+      opacity: 0.5,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true,
+    });
+    const spices = new THREE.Points(spiceGeo, spiceMat);
+    pizzaGroup.add(spices);
+
+    // ===== Floating golden rings =====
+    const rings = [];
+    for (let i = 0; i < 3; i++) {
+      const ringGeo = new THREE.TorusGeometry(2.8 + i * 0.4, 0.02, 8, 48);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xFFD700,
+        transparent: true,
+        opacity: 0.15 - i * 0.04,
+      });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = Math.PI / 2 + 0.1;
+      ring.position.y = -0.5 - i * 0.3;
+      scene.add(ring);
+      rings.push(ring);
+    }
+
+    // ===== Animation =====
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetRotX = 0;
+    let targetRotY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const time = Date.now() * 0.001;
+
+      // Smooth mouse tracking
+      targetRotX += (mouseY * 0.3 - targetRotX) * 0.03;
+      targetRotY += (mouseX * 0.3 - targetRotY) * 0.03;
+
+      pizzaGroup.rotation.x += 0.003 + targetRotX * 0.001;
+      pizzaGroup.rotation.y += 0.005 + targetRotY * 0.001;
+      pizzaGroup.rotation.z += 0.001;
+
+      // Floating particles
+      const pPos = particles.geometry.attributes.position.array;
+      for (let i = 0; i < particleCount; i++) {
+        pPos[i * 3 + 1] += Math.sin(time + i) * 0.001;
+      }
+      particles.geometry.attributes.position.needsUpdate = true;
+      particles.rotation.y += 0.0005;
+
+      // Rings pulse
+      rings.forEach((ring, i) => {
+        ring.scale.setScalar(1 + Math.sin(time * 0.5 + i) * 0.05);
+        ring.material.opacity = 0.12 + Math.sin(time * 0.7 + i * 2) * 0.05;
+        ring.rotation.z += 0.002;
+      });
+
+      // Camera slight movement
+      camera.position.x = Math.sin(time * 0.1) * 0.5;
+      camera.position.y = 1 + Math.sin(time * 0.15) * 0.2;
+      camera.lookAt(0, 0, 0);
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // ===== RESIZE =====
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // ===== HIDE LOADER =====
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+      }, 800);
+    });
+  </script>
+</body>
+</html>
